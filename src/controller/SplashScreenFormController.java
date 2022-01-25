@@ -22,7 +22,7 @@ public class SplashScreenFormController {
             Platform.runLater(()->{
                 try {
                     Stage stage = new Stage();
-                    AnchorPane root = FXMLLoader.load(this.getClass().getResource("/view/RecordAttendanceForm.fxml"));
+                    AnchorPane root = FXMLLoader.load(this.getClass().getResource("/view/AlertForm.fxml"));
                     Scene scene = new Scene(root);
                     stage.setScene(scene);
                     stage.sizeToScene();

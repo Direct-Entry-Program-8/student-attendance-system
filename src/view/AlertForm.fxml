@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="393.0" prefWidth="486.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AlertFormController">
+   <children>
+      <ImageView fitHeight="114.0" fitWidth="114.0" layoutX="30.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@assets/danger.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="180.0" layoutY="26.0" text="ALERT!" textFill="RED">
+         <font>
+            <Font size="62.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="144.0" layoutY="101.0" prefHeight="45.0" prefWidth="322.0" text="Danger Dial Ekak...! Ekko Walen Ena Ekek, Natthan Walata Yana Ekek...!" textAlignment="CENTER" wrapText="true" />
+      <VBox layoutX="22.0" layoutY="209.0" prefHeight="98.0" prefWidth="443.0" spacing="10.0">
+         <children>
+            <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Last Recorded Details">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" text="ID: 2021/DEP08/I001">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" layoutX="10.0" layoutY="40.0" maxWidth="1.7976931348623157E308" text="NAME: THILINA UPENDRA">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" layoutX="10.0" layoutY="70.0" maxWidth="1.7976931348623157E308" text="2022-01-25 12:15 AM - IN">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Do you want to proceed?" />
+            <FlowPane alignment="CENTER" hgap="10.0">
+               <children>
+                  <Button fx:id="btnProceed" alignment="CENTER" defaultButton="true" mnemonicParsing="false" onAction="#btnProceed_OnAction" prefHeight="26.0" prefWidth="84.0" text="Proceed" textAlignment="CENTER" />
+                  <Button fx:id="btnCallPolice" alignment="CENTER" cancelButton="true" mnemonicParsing="false" onAction="#btnCallPolice_OnAction" prefHeight="26.0" prefWidth="91.0" text="Call Police" textAlignment="CENTER" />
+               </children>
+            </FlowPane>
+         </children>
+      </VBox>
+      <Line endX="330.0" layoutX="131.0" layoutY="184.0" startX="-100.0" />
+   </children>
+</AnchorPane>
