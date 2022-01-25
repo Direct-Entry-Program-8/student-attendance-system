@@ -11,13 +11,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="529.0" prefWidth="488.0" style="-fx-background-color: white;" stylesheets="@style/AdminHomeFormStyles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminHomeFormController">
+<AnchorPane prefHeight="541.0" prefWidth="488.0" style="-fx-background-color: white;" stylesheets="@style/AdminHomeFormStyles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminHomeFormController">
    <children>
       <HBox alignment="CENTER" layoutX="15.0" layoutY="100.0" spacing="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="120.0">
          <children>
             <VBox alignment="CENTER" maxWidth="1.7976931348623157E308" spacing="20.0">
                <children>
-                  <Button fx:id="btnRecordAttendance" accessibleText="Click to record a new student attendance" contentDisplay="TOP" graphicTextGap="15.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnRecordAttendance_OnAction" prefHeight="71.0" prefWidth="249.0" style="-fx-background-color: lightgray;" text="[F1] Record Attendance">
+                  <Button fx:id="btnRecordAttendance" accessibleText="Click to record a new student attendance" contentDisplay="TOP" graphicTextGap="15.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnRecordAttendance_OnAction" prefHeight="71.0" prefWidth="249.0" style="-fx-background-color: white;" text="[F1] Record Attendance">
                      <graphic>
                         <ImageView fitHeight="67.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -35,7 +35,7 @@
                         <Insets />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="btnViewReports" accessibleText="Click to view attendance reports" contentDisplay="TOP" graphicTextGap="15.0" layoutX="10.0" layoutY="97.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnViewReports_OnAction" prefHeight="44.0" style="-fx-background-color: lightgray;" text="[F2] View Reports">
+                  <Button fx:id="btnViewReports" accessibleText="Click to view attendance reports" contentDisplay="TOP" graphicTextGap="15.0" layoutX="10.0" layoutY="97.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnViewReports_OnAction" prefHeight="44.0" style="-fx-background-color: white;" text="[F2] View Reports">
                      <graphic>
                         <ImageView fitHeight="66.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -53,7 +53,7 @@
                         <Insets />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="btnUserProfile" accessibleText="Click to manage the user profile" contentDisplay="TOP" graphicTextGap="15.0" layoutX="10.0" layoutY="110.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnUserProfile_OnAction" prefHeight="44.0" style="-fx-background-color: lightgray;" text="[F3] User Profile">
+                  <Button fx:id="btnUserProfile" accessibleText="Click to manage the user profile" contentDisplay="TOP" graphicTextGap="15.0" layoutX="10.0" layoutY="110.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnUserProfile_OnAction" prefHeight="44.0" style="-fx-background-color: white;" text="[F3] User Profile">
                      <graphic>
                         <ImageView fitHeight="76.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -75,7 +75,7 @@
             </VBox>
             <VBox maxWidth="1.7976931348623157E308" spacing="20.0">
                <children>
-                  <Button fx:id="btnManageUsers" accessibleText="Click to add, update, remove users" contentDisplay="TOP" graphicTextGap="15.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnManageUsers_OnAction" prefHeight="44.0" prefWidth="249.0" style="-fx-background-color: lightgray;" text="[F4] Manage Users">
+                  <Button fx:id="btnManageUsers" accessibleText="Click to add, update, remove users" contentDisplay="TOP" graphicTextGap="15.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnManageUsers_OnAction" prefHeight="44.0" prefWidth="249.0" style="-fx-background-color: white;" text="[F4] Manage Users">
                      <graphic>
                         <ImageView fitHeight="62.0" fitWidth="86.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -93,7 +93,7 @@
                         <Insets />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="btnBackupRestore" accessibleText="Click to backup or restore the database" contentDisplay="TOP" graphicTextGap="15.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnBackupRestore_OnAction" prefHeight="44.0" style="-fx-background-color: lightgray;" text="[F5] Backup/Restore">
+                  <Button fx:id="btnBackupRestore" accessibleText="Click to backup or restore the database" contentDisplay="TOP" graphicTextGap="15.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnBackupRestore_OnAction" prefHeight="44.0" style="-fx-background-color: white;" text="[F5] Backup/Restore">
                      <graphic>
                         <ImageView fitHeight="76.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -111,7 +111,7 @@
                         <Insets />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="btnSignOut" accessibleText="Click to sign out" contentDisplay="TOP" graphicTextGap="15.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnSignOut_OnAction" prefHeight="44.0" style="-fx-background-color: lightgray;" text="[F12] Sign Out">
+                  <Button fx:id="btnSignOut" accessibleText="Click to sign out" contentDisplay="TOP" graphicTextGap="15.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnSignOut_OnAction" prefHeight="44.0" style="-fx-background-color: white;" text="[F12] Sign Out">
                      <graphic>
                         <ImageView fitHeight="62.0" fitWidth="88.0" pickOnBounds="true">
                            <image>
