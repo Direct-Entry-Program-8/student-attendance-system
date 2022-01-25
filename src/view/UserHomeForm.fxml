@@ -17,7 +17,7 @@
                <graphic>
                   <ImageView fitHeight="67.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@assets/qr-code.png" />
+                        <Image url="@assets/attendance.png" />
                      </image>
                   </ImageView>
                </graphic>
