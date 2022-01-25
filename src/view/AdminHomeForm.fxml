@@ -147,6 +147,9 @@
             <Font name="Ubuntu" size="11.0" />
          </font>
       </Label>
-      <Label fx:id="lblHover" alignment="CENTER" layoutX="18.0" layoutY="88.0" prefHeight="16.0" prefWidth="449.0" text="Select an option to continue" textAlignment="CENTER" />
+      <Label fx:id="lblHover" alignment="CENTER" layoutX="18.0" layoutY="88.0" prefHeight="16.0" prefWidth="449.0" text="Select an option to continue" textAlignment="CENTER">
+         <font>
+            <Font name="Ubuntu" size="14.0" />
+         </font></Label>
    </children>
 </AnchorPane>
