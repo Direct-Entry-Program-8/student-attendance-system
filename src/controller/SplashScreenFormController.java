@@ -12,15 +12,14 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class SplashScreenFormController {
     public Label lblStatus;
-    private File file;              // Backup file to restore
+    private SimpleObjectProperty<File> fileProperty = new SimpleObjectProperty<>();
 
     public void initialize() {
         establishDBConnection();
@@ -41,7 +40,7 @@ public class SplashScreenFormController {
                 /* Let's find out whether the DB exists or not */
                 if (e.getSQLState().equals("42000")) {
                     Platform.runLater(this::loadImportDBForm);
-                }else{
+                } else {
                     e.printStackTrace();
                 }
             }
@@ -51,9 +50,13 @@ public class SplashScreenFormController {
 
     private void loadImportDBForm() {
         try {
-            SimpleObjectProperty<File> fileProperty = new SimpleObjectProperty<>();
             Stage stage = new Stage();
-            AnchorPane root = FXMLLoader.load(this.getClass().getResource("/view/ImportDBForm.fxml"));
+
+            FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/view/ImportDBForm.fxml"));
+            AnchorPane root = fxmlLoader.load();
+            ImportDBFormController controller = fxmlLoader.getController();
+            controller.initFileProperty(fileProperty);
+
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.sizeToScene();
@@ -63,33 +66,47 @@ public class SplashScreenFormController {
             stage.initOwner(lblStatus.getScene().getWindow());
             stage.centerOnScreen();
             stage.showAndWait();
-            file = fileProperty.getValue();
 
-            if (file == null){
+            if (fileProperty.getValue() == null) {
                 lblStatus.setText("Creating a new DB..");
-                new Thread(()->{
+                new Thread(() -> {
                     try {
                         sleep(100);
-                        Platform.runLater(()->lblStatus.setText("Loading database script.."));
+                        Platform.runLater(() -> lblStatus.setText("Loading database script.."));
 
                         InputStream is = this.getClass().getResourceAsStream("/assets/db-script.sql");
                         byte[] buffer = new byte[is.available()];
                         is.read(buffer);
                         String script = new String(buffer);
+                        sleep(100);
 
-                    } catch (IOException e) {
+                        Connection connection = DriverManager.
+                                getConnection("jdbc:mysql://localhost:3306?allowMultiQueries=true", "root", "mysql");
+                        Platform.runLater(() -> lblStatus.setText("Execute database script.."));
+                        Statement stm = connection.createStatement();
+                        stm.execute(script);
+                        connection.close();
+                        sleep(100);
+
+                        Platform.runLater(() -> lblStatus.setText("Obtaining a new DB Connection.."));
+                        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/dep8_student_attendance", "root", "mysql");
+                        sleep(100);
+
+                        Platform.runLater(() -> lblStatus.setText("Setting up the UI.."));
+                    } catch (IOException | SQLException e) {
                         e.printStackTrace();
                     }
                 }).start();
-            }else{
+            } else {
                 /* Todo: Restore the backup */
+                System.out.println("Restoring...!");
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void sleep(long millis){
+    private void sleep(long millis) {
         try {
             Thread.sleep(millis);
         } catch (InterruptedException e) {

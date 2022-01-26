@@ -23,6 +23,9 @@ public class ImportDBFormController {
 
     public void initialize() {
         txtBrowse.setEditable(false);
+        rdoRestore.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            btnOK.setDisable(txtBrowse.getText().isEmpty() && newValue);
+        });
     }
 
     public void initFileProperty(SimpleObjectProperty<File> fileProperty) {
