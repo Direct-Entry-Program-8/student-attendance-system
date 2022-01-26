@@ -11,6 +11,9 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -38,8 +41,9 @@ public class SplashScreenFormController {
                 /* Let's find out whether the DB exists or not */
                 if (e.getSQLState().equals("42000")) {
                     Platform.runLater(this::loadImportDBForm);
+                }else{
+                    e.printStackTrace();
                 }
-                e.printStackTrace();
             }
 
         }).start();
@@ -48,7 +52,6 @@ public class SplashScreenFormController {
     private void loadImportDBForm() {
         try {
             SimpleObjectProperty<File> fileProperty = new SimpleObjectProperty<>();
-
             Stage stage = new Stage();
             AnchorPane root = FXMLLoader.load(this.getClass().getResource("/view/ImportDBForm.fxml"));
             Scene scene = new Scene(root);
@@ -60,7 +63,36 @@ public class SplashScreenFormController {
             stage.initOwner(lblStatus.getScene().getWindow());
             stage.centerOnScreen();
             stage.showAndWait();
+            file = fileProperty.getValue();
+
+            if (file == null){
+                lblStatus.setText("Creating a new DB..");
+                new Thread(()->{
+                    try {
+                        sleep(100);
+                        Platform.runLater(()->lblStatus.setText("Loading database script.."));
+
+                        InputStream is = this.getClass().getResourceAsStream("/assets/db-script.sql");
+                        byte[] buffer = new byte[is.available()];
+                        is.read(buffer);
+                        String script = new String(buffer);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            }else{
+                /* Todo: Restore the backup */
+            }
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sleep(long millis){
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
