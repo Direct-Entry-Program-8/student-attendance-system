@@ -48,6 +48,6 @@ public class Principal {
     }
 
     public enum UserRole {
-        ADMIN, USER;
+        ADMIN, USER
     }
 }
