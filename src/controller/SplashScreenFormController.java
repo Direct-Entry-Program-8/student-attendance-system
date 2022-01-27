@@ -33,12 +33,12 @@ public class SplashScreenFormController {
         new Thread(() -> {
 
             try {
-                sleep(500);
+                sleep(250);
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/dep8_student_attendance", "root", "mysql");
 
                 Platform.runLater(() -> lblStatus.setText("Setting up the UI.."));
-                sleep(500);
+                sleep(250);
 
                 Platform.runLater(() -> {
                     loadLoginForm(connection);
@@ -84,14 +84,14 @@ public class SplashScreenFormController {
 
                 new Thread(() -> {
                     try {
-                        sleep(500);
+                        sleep(250);
                         Platform.runLater(() -> lblStatus.setText("Loading database script.."));
 
                         InputStream is = this.getClass().getResourceAsStream("/assets/db-script.sql");
                         byte[] buffer = new byte[is.available()];
                         is.read(buffer);
                         String script = new String(buffer);
-                        sleep(500);
+                        sleep(250);
 
                         Connection connection = DriverManager.
                                 getConnection("jdbc:mysql://localhost:3306?allowMultiQueries=true", "root", "mysql");
@@ -99,11 +99,11 @@ public class SplashScreenFormController {
                         Statement stm = connection.createStatement();
                         stm.execute(script);
                         connection.close();
-                        sleep(500);
+                        sleep(250);
 
                         Platform.runLater(() -> lblStatus.setText("Obtaining a new DB Connection.."));
                         connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/dep8_student_attendance", "root", "mysql");
-                        sleep(500);
+                        sleep(250);
 
                         /* Storing the database connection as a singleton instance */
                         DBConnection.getInstance().init(connection);
@@ -111,7 +111,7 @@ public class SplashScreenFormController {
                         /* Let's redirect to Create Admin Form */
                         Platform.runLater(() -> {
                             lblStatus.setText("Setting up the UI..");
-                            sleep(500);
+                            sleep(250);
 
                             loadCreateAdminForm();
                         });
@@ -142,6 +142,7 @@ public class SplashScreenFormController {
             stage.setResizable(false);
             stage.centerOnScreen();
             stage.sizeToScene();
+            stage.setOnCloseRequest((e)->dropDatabase());
             stage.show();
 
             /* Let's close the splash screen eventually */
@@ -188,7 +189,7 @@ public class SplashScreenFormController {
     private void shutdownApp(Throwable t) {
         Platform.runLater(() -> lblStatus.setText("Failed to initialize the app"));
 
-        sleep(2000);
+        sleep(1200);
 
         if (t != null)
             t.printStackTrace();
