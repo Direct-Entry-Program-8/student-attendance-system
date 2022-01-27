@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,7 +44,6 @@ public class SplashScreenFormController {
                     loadLoginForm(connection);
                 });
 
-
             } catch (SQLException | ClassNotFoundException e) {
 
                 /* Let's find out whether the DB exists or not */
@@ -74,6 +74,9 @@ public class SplashScreenFormController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initOwner(lblStatus.getScene().getWindow());
             stage.centerOnScreen();
+            stage.setOnCloseRequest(event -> {
+                event.consume();
+            });
             stage.showAndWait();
 
             if (fileProperty.getValue() == null) {
@@ -113,11 +116,14 @@ public class SplashScreenFormController {
                             loadCreateAdminForm();
                         });
                     } catch (IOException | SQLException e) {
+                        if (e instanceof SQLException){
+                            dropDatabase();
+                        }
                         shutdownApp(e);
                     }
                 }).start();
             } else {
-                /* Todo: Restore the backup and handle execeptions and errors */
+                /* Todo: Restore the backup and handle exceptions and errors */
                 System.out.println("Restoring...!");
 //                loadLoginForm(connection);
             }
@@ -168,11 +174,14 @@ public class SplashScreenFormController {
         }
     }
 
-    private void sleep(long millis) {
+    private void dropDatabase(){
         try {
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "mysql");
+            Statement stm = connection.createStatement();
+            stm.execute("DROP DATABASE IF EXISTS dep8_student_attendance");
+            connection.close();
+        } catch (SQLException e) {
+            shutdownApp(e);
         }
     }
 
@@ -185,5 +194,13 @@ public class SplashScreenFormController {
             t.printStackTrace();
 
         System.exit(1);
+    }
+
+    private void sleep(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
