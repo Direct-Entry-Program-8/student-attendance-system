@@ -33,6 +33,13 @@ public class SplashScreenFormController {
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/dep8_student_attendance", "root", "mysql");
+                sleep(100);
+
+                Platform.runLater(()->lblStatus.setText("Setting up the UI.."));
+                sleep(100);
+
+
+
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (SQLException e) {
