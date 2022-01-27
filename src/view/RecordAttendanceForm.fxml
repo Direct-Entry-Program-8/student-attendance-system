@@ -27,12 +27,12 @@
       <Label alignment="CENTER" layoutX="107.0" layoutY="133.0" text="Please enter/scan the student ID to proceed" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
       <FlowPane alignment="CENTER" hgap="15.0" layoutX="121.0" layoutY="343.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <Button fx:id="btnIn" mnemonicParsing="false" onAction="#btnIn_OnAction" prefHeight="48.0" prefWidth="75.0" style="-fx-background-color: green; -fx-text-fill: white;" text="IN">
+            <Button fx:id="btnIn" focusTraversable="false" mnemonicParsing="false" onAction="#btnIn_OnAction" prefHeight="48.0" prefWidth="109.0" style="-fx-background-color: green; -fx-text-fill: white;" text="IN [ENT]">
                <font>
                   <Font size="16.0" />
                </font>
             </Button>
-            <Button fx:id="btnOut" mnemonicParsing="false" onAction="#btnOut_OnAction" prefHeight="48.0" prefWidth="75.0" style="-fx-background-color: orange;" text="OUT">
+            <Button fx:id="btnOut" focusTraversable="false" mnemonicParsing="false" onAction="#btnOut_OnAction" prefHeight="48.0" prefWidth="109.0" style="-fx-background-color: orange;" text="OUT [ESC]">
                <font>
                   <Font size="16.0" />
                </font>
