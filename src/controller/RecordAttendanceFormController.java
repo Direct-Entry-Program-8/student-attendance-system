@@ -37,6 +37,8 @@ public class RecordAttendanceFormController {
     private PreparedStatement stmSearchStudent;
 
     public void initialize() {
+        btnIn.setDisable(true);
+        btnOut.setDisable(true);
         lblDate.setText(String.format("%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS %1$Tp", new Date()));
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), (event -> {
@@ -68,6 +70,8 @@ public class RecordAttendanceFormController {
 
 
     public void txtStudentID_OnAction(ActionEvent event) {
+        btnIn.setDisable(true);
+        btnOut.setDisable(true);
         lblStudentName.setText("Please enter/scan the student ID to proceed");
         imgProfile.setImage(new Image("/view/assets/qr-code.png"));
 
@@ -83,6 +87,9 @@ public class RecordAttendanceFormController {
                 lblStudentName.setText(rst.getString("name").toUpperCase());
                 InputStream is = rst.getBlob("picture").getBinaryStream();
                 imgProfile.setImage(new Image(is));
+                btnIn.setDisable(false);
+                btnOut.setDisable(false);
+                txtStudentID.selectAll();
             }else{
                 new DepAlert(Alert.AlertType.ERROR, "Invalid Student ID, Try again!", "Oops!", "Error").show();
                 txtStudentID.selectAll();
