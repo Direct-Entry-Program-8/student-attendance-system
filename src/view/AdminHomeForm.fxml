@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="541.0" prefWidth="488.0" style="-fx-background-color: white;" stylesheets="@style/AdminHomeFormStyles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminHomeFormController">
+<AnchorPane prefHeight="541.0" prefWidth="488.0" style="-fx-background-color: white;" stylesheets="@style/HomeFormStyles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminHomeFormController">
    <children>
       <HBox alignment="CENTER" layoutX="15.0" layoutY="100.0" spacing="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="120.0">
          <children>
@@ -138,7 +138,7 @@
             <Font name="Ubuntu" size="19.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" layoutX="49.0" layoutY="56.0" prefHeight="16.0" prefWidth="246.0" text="Welcome Nuwan!" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <Label fx:id="lblGreeting" alignment="CENTER" layoutX="49.0" layoutY="56.0" prefHeight="16.0" prefWidth="246.0" text="Welcome Nuwan!" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <font>
             <Font name="Ubuntu Light" size="13.0" />
          </font></Label>

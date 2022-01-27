@@ -14,6 +14,7 @@ public class AdminHomeFormController {
     public Button btnBackupRestore;
     public Button btnSignOut;
     public Label lblHover;
+    public Label lblGreeting;
 
     public void initialize(){
         final String initialText = lblHover.getText();
@@ -30,6 +31,10 @@ public class AdminHomeFormController {
         btnManageUsers.setOnMouseExited(event -> lblHover.setText(initialText));
         btnBackupRestore.setOnMouseExited(event -> lblHover.setText(initialText));
         btnSignOut.setOnMouseExited(event -> lblHover.setText(initialText));
+    }
+
+    public void initUsername(String username){
+        lblGreeting.setText("Welcome " + username + "!");
     }
 
     private void displayHoveringText(Button button){

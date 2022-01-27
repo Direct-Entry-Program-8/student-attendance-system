@@ -76,7 +76,7 @@
             <Font name="Ubuntu" size="18.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" layoutX="49.0" layoutY="56.0" prefHeight="16.0" prefWidth="246.0" text="Welcome Nuwan!" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <Label fx:id="lblGreeting" alignment="CENTER" layoutX="49.0" layoutY="56.0" prefHeight="16.0" prefWidth="246.0" text="Welcome Nuwan!" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <font>
             <Font name="Ubuntu Light" size="13.0" />
          </font></Label>

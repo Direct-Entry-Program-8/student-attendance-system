@@ -11,6 +11,7 @@ public class UserHomeFormController {
     public Button btnUserProfile;
     public Button btnSignOut;
     public Label lblHover;
+    public Label lblGreeting;
 
     public void initialize(){
         final String initialText = lblHover.getText();
@@ -23,6 +24,10 @@ public class UserHomeFormController {
         btnViewReports.setOnMouseExited(event -> lblHover.setText(initialText));
         btnUserProfile.setOnMouseExited(event -> lblHover.setText(initialText));
         btnSignOut.setOnMouseExited(event -> lblHover.setText(initialText));
+    }
+
+    public void initUsername(String username){
+        lblGreeting.setText("Welcome " + username + "!");
     }
 
     private void displayHoveringText(Button button){
