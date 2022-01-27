@@ -20,7 +20,7 @@ import java.sql.Statement;
 
 public class SplashScreenFormController {
     public Label lblStatus;
-    private SimpleObjectProperty<File> fileProperty = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<File> fileProperty = new SimpleObjectProperty<>();
 
     public void initialize() {
         establishDBConnection();
@@ -32,26 +32,25 @@ public class SplashScreenFormController {
         new Thread(() -> {
 
             try {
+                sleep(500);
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/dep8_student_attendance", "root", "mysql");
-                sleep(100);
 
-                Platform.runLater(()->lblStatus.setText("Setting up the UI.."));
-                sleep(100);
+                Platform.runLater(() -> lblStatus.setText("Setting up the UI.."));
+                sleep(500);
 
-                Platform.runLater(()->{
+                Platform.runLater(() -> {
                     loadLoginForm(connection);
                 });
 
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (SQLException e) {
+
+            } catch (SQLException | ClassNotFoundException e) {
 
                 /* Let's find out whether the DB exists or not */
-                if (e.getSQLState().equals("42000")) {
+                if (e instanceof SQLException && ((SQLException) e).getSQLState().equals("42000")) {
                     Platform.runLater(this::loadImportDBForm);
                 } else {
-                    e.printStackTrace();
+                    shutdownApp(e);
                 }
             }
 
@@ -79,16 +78,17 @@ public class SplashScreenFormController {
 
             if (fileProperty.getValue() == null) {
                 lblStatus.setText("Creating a new DB..");
+
                 new Thread(() -> {
                     try {
-                        sleep(100);
+                        sleep(500);
                         Platform.runLater(() -> lblStatus.setText("Loading database script.."));
 
                         InputStream is = this.getClass().getResourceAsStream("/assets/db-script.sql");
                         byte[] buffer = new byte[is.available()];
                         is.read(buffer);
                         String script = new String(buffer);
-                        sleep(100);
+                        sleep(500);
 
                         Connection connection = DriverManager.
                                 getConnection("jdbc:mysql://localhost:3306?allowMultiQueries=true", "root", "mysql");
@@ -96,11 +96,11 @@ public class SplashScreenFormController {
                         Statement stm = connection.createStatement();
                         stm.execute(script);
                         connection.close();
-                        sleep(100);
+                        sleep(500);
 
                         Platform.runLater(() -> lblStatus.setText("Obtaining a new DB Connection.."));
                         connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/dep8_student_attendance", "root", "mysql");
-                        sleep(100);
+                        sleep(500);
 
                         /* Storing the database connection as a singleton instance */
                         DBConnection.getInstance().init(connection);
@@ -108,25 +108,25 @@ public class SplashScreenFormController {
                         /* Let's redirect to Create Admin Form */
                         Platform.runLater(() -> {
                             lblStatus.setText("Setting up the UI..");
-                            sleep(100);
+                            sleep(500);
 
                             loadCreateAdminForm();
                         });
                     } catch (IOException | SQLException e) {
-                        e.printStackTrace();
+                        shutdownApp(e);
                     }
                 }).start();
             } else {
-                /* Todo: Restore the backup */
+                /* Todo: Restore the backup and handle execeptions and errors */
                 System.out.println("Restoring...!");
 //                loadLoginForm(connection);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            shutdownApp(e);
         }
     }
 
-    private void loadCreateAdminForm(){
+    private void loadCreateAdminForm() {
         try {
             Stage stage = new Stage();
             AnchorPane root = FXMLLoader.load(this.getClass().getResource("/view/CreateAdminForm.fxml"));
@@ -139,18 +139,18 @@ public class SplashScreenFormController {
             stage.show();
 
             /* Let's close the splash screen eventually */
-            ((Stage)(lblStatus.getScene().getWindow())).close();
+            ((Stage) (lblStatus.getScene().getWindow())).close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void loadLoginForm(Connection connection){
+    private void loadLoginForm(Connection connection) {
         /* Let's store the connection first */
         DBConnection.getInstance().init(connection);
 
         /* Let's redirect to log in form */
-        try{
+        try {
             Stage stage = new Stage();
             AnchorPane root = FXMLLoader.load(this.getClass().getResource("/view/LoginForm.fxml"));
             Scene scene = new Scene(root);
@@ -162,8 +162,8 @@ public class SplashScreenFormController {
             stage.show();
 
             /* Let's close the splash screen eventually */
-            ((Stage)(lblStatus.getScene().getWindow())).close();
-        }catch (IOException e){
+            ((Stage) (lblStatus.getScene().getWindow())).close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -174,5 +174,16 @@ public class SplashScreenFormController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private void shutdownApp(Throwable t) {
+        Platform.runLater(() -> lblStatus.setText("Failed to initialize the app"));
+
+        sleep(2000);
+
+        if (t != null)
+            t.printStackTrace();
+
+        System.exit(1);
     }
 }
