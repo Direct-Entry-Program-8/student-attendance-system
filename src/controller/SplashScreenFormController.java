@@ -39,7 +39,9 @@ public class SplashScreenFormController {
                 Platform.runLater(()->lblStatus.setText("Setting up the UI.."));
                 sleep(100);
 
-
+                Platform.runLater(()->{
+                    loadLoginForm(connection);
+                });
 
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -117,6 +119,7 @@ public class SplashScreenFormController {
             } else {
                 /* Todo: Restore the backup */
                 System.out.println("Restoring...!");
+//                loadLoginForm(connection);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -138,6 +141,29 @@ public class SplashScreenFormController {
             /* Let's close the splash screen eventually */
             ((Stage)(lblStatus.getScene().getWindow())).close();
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadLoginForm(Connection connection){
+        /* Let's store the connection first */
+        DBConnection.getInstance().init(connection);
+
+        /* Let's redirect to log in form */
+        try{
+            Stage stage = new Stage();
+            AnchorPane root = FXMLLoader.load(this.getClass().getResource("/view/LoginForm.fxml"));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Student Attendance System: Log In");
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.sizeToScene();
+            stage.show();
+
+            /* Let's close the splash screen eventually */
+            ((Stage)(lblStatus.getScene().getWindow())).close();
+        }catch (IOException e){
             e.printStackTrace();
         }
     }

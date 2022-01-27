@@ -30,7 +30,7 @@
       </RadioButton>
       <TextField fx:id="txtBrowse" layoutX="33.0" layoutY="97.0" prefHeight="26.0" prefWidth="383.0" />
       <Button fx:id="btnBrowse" layoutX="418.0" layoutY="97.0" mnemonicParsing="false" onAction="#btnBrowse_OnAction" text="..." />
-      <RadioButton fx:id="rdoFirstTime" layoutX="14.0" layoutY="136.0" mnemonicParsing="false" selected="true" text="First time boot" toggleGroup="$abc">
+      <RadioButton fx:id="rdoFirstTime" layoutX="14.0" layoutY="136.0" mnemonicParsing="false" selected="true" text="Fresh boot" toggleGroup="$abc">
          <font>
             <Font name="Ubuntu" size="13.0" />
          </font>
