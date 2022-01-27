@@ -11,6 +11,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import security.Principal;
+import security.SecurityContextHolder;
 import util.DepAlert;
 
 import java.sql.Connection;
@@ -44,6 +46,10 @@ public class LoginFormController {
             ResultSet rst = stm.executeQuery();
 
             if (rst.next()){
+                SecurityContextHolder.setPrincipal(new Principal(
+                        txtUserName.getText(),
+                        rst.getString("name"),
+                        Principal.UserRole.valueOf(rst.getString("role"))));
                 String path = null;
 
                 if (rst.getString("role").equals("ADMIN")){
@@ -54,15 +60,6 @@ public class LoginFormController {
                 FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource(path));
                 AnchorPane root = fxmlLoader.load();
                 Scene homeScene = new Scene(root);
-
-                if (path.equals("/view/AdminHomeForm.fxml")){
-                    AdminHomeFormController controller = fxmlLoader.getController();
-                    controller.initUsername(rst.getString("name"));
-                }else{
-                    UserHomeFormController controller = fxmlLoader.getController();
-                    controller.initUsername(rst.getString("name"));
-                }
-
                 Stage primaryStage = (Stage)(btnSignIn.getScene().getWindow());
                 primaryStage.setScene(homeScene);
                 primaryStage.setTitle("Student Attendance System: Home");

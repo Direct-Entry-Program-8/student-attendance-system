@@ -3,6 +3,7 @@ package controller;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import security.SecurityContextHolder;
 
 public class UserHomeFormController {
 
@@ -24,10 +25,8 @@ public class UserHomeFormController {
         btnViewReports.setOnMouseExited(event -> lblHover.setText(initialText));
         btnUserProfile.setOnMouseExited(event -> lblHover.setText(initialText));
         btnSignOut.setOnMouseExited(event -> lblHover.setText(initialText));
-    }
 
-    public void initUsername(String username){
-        lblGreeting.setText("Welcome " + username + "!");
+        lblGreeting.setText("Welcome " + SecurityContextHolder.getPrincipal().getName() + "!");
     }
 
     private void displayHoveringText(Button button){
