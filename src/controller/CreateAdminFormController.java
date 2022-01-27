@@ -9,11 +9,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import util.DepAlert;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -71,7 +73,7 @@ public class CreateAdminFormController {
             stm.setString(4, "ADMIN");
             stm.executeUpdate();
 
-            new Alert(Alert.AlertType.INFORMATION, "Your account has been created successfully").showAndWait();
+            new DepAlert(Alert.AlertType.INFORMATION, "Account has been created successfully", "Account Created", "Success").showAndWait();
 
             /* Let's redirect to the Login Form */
             AnchorPane root = FXMLLoader.load(this.getClass().getResource("/view/LoginForm.fxml"));
@@ -81,9 +83,12 @@ public class CreateAdminFormController {
             primaryStage.setTitle("Student Attendance System: Log In");
             primaryStage.setResizable(false);
             primaryStage.centerOnScreen();
+            primaryStage.show();
             Platform.runLater(() -> primaryStage.sizeToScene());
+
+            ((Stage)(btnCreateAccount.getScene().getWindow())).close();
         } catch (SQLException | IOException e) {
-            new Alert(Alert.AlertType.ERROR, "Something went wrong, please try again").show();
+            new DepAlert(Alert.AlertType.WARNING, "Something went wrong, please try again", "Oops..!", "Failed").show();
             e.printStackTrace();
         }
     }
@@ -95,27 +100,27 @@ public class CreateAdminFormController {
         String confirmPassword = txtConfirmPassword.getText().trim();
 
         if (!name.matches("[A-Za-z ]+")) {
-            new Alert(Alert.AlertType.ERROR, "Please enter valid name").show();
+            new DepAlert(Alert.AlertType.ERROR, "Please enter valid name", "Validation Error").show();
             txtName.selectAll();
             txtName.requestFocus();
             return false;
         } else if (username.length() < 4) {
-            new Alert(Alert.AlertType.ERROR, "Username should be at least 4 characters long").show();
+            new DepAlert(Alert.AlertType.ERROR, "Username should be at least 4 characters long", "Validation Error").show();
             txtUserName.selectAll();
             txtUserName.requestFocus();
             return false;
         } else if (!username.matches("[A-Za-z0-9]+")) {
-            new Alert(Alert.AlertType.ERROR, "Username can contain only characters and digits").show();
+            new DepAlert(Alert.AlertType.ERROR, "Username can contain only characters and digits", "Validation Error").show();
             txtUserName.selectAll();
             txtUserName.requestFocus();
             return false;
         } else if (password.length() < 4) {
-            new Alert(Alert.AlertType.ERROR, "Password should be at least 4 characters long").show();
+            new DepAlert(Alert.AlertType.ERROR, "Password should be at least 4 characters long", "Validation Error").show();
             txtPassword.selectAll();
             txtPassword.requestFocus();
             return false;
         } else if (!password.equals(confirmPassword)) {
-            new Alert(Alert.AlertType.ERROR, "Password mismatch").show();
+            new DepAlert(Alert.AlertType.ERROR, "Password mismatch", "Validation Error").show();
             txtConfirmPassword.selectAll();
             txtConfirmPassword.requestFocus();
             return false;

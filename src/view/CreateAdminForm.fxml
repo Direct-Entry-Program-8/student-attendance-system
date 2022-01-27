@@ -13,7 +13,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="421.0" prefWidth="600.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CreateAdminFormController">
+<AnchorPane prefHeight="443.0" prefWidth="600.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CreateAdminFormController">
    <children>
       <ImageView fitHeight="117.0" fitWidth="117.0" layoutX="34.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
          <image>
