@@ -24,7 +24,7 @@ public class DBConnection {
 
     public Connection getConnection(){
         if (connection == null){
-            throw new RuntimeException("Init a connection");
+            throw new RuntimeException("Init a connection first");
         }
         return connection;
     }
