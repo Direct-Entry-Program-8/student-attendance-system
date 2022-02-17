@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import util.DepAlert;
@@ -34,6 +35,7 @@ public class RecordAttendanceFormController {
     public Label lblName;
     public Label lblStatus;
     public Label lblStudentName;
+    public AnchorPane root;
     private PreparedStatement stmSearchStudent;
 
     public void initialize() {
@@ -57,15 +59,26 @@ public class RecordAttendanceFormController {
                 ((Stage)(btnIn.getScene().getWindow())).close();
             });
         }
+
+        root.setOnKeyReleased(event -> {
+            switch (event.getCode()){
+                case F10:
+                    btnIn.fire();
+                    break;
+                case ESCAPE:
+                    btnOut.fire();
+                    break;
+            }
+        });
     }
 
     public void btnIn_OnAction(ActionEvent event) {
-
+        System.out.println("IN");
     }
 
 
     public void btnOut_OnAction(ActionEvent event) {
-
+        System.out.println("OUT");
     }
 
 

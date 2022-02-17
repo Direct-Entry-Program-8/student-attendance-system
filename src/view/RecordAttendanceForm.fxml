@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="552.0" prefWidth="414.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RecordAttendanceFormController">
+<AnchorPane fx:id="root" prefHeight="552.0" prefWidth="414.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RecordAttendanceFormController">
    <children>
       <Label alignment="CENTER" layoutX="95.0" layoutY="27.0" prefHeight="20.0" prefWidth="245.0" text="Record Attendance" AnchorPane.leftAnchor="95.0" AnchorPane.rightAnchor="95.0">
          <font>
@@ -27,7 +27,7 @@
       <Label fx:id="lblStudentName" alignment="CENTER" layoutX="107.0" layoutY="133.0" text="Please enter/scan the student ID to proceed" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
       <FlowPane alignment="CENTER" hgap="15.0" layoutX="121.0" layoutY="343.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <Button fx:id="btnIn" focusTraversable="false" mnemonicParsing="false" onAction="#btnIn_OnAction" prefHeight="48.0" prefWidth="109.0" style="-fx-background-color: green; -fx-text-fill: white;" text="IN [ENT]">
+            <Button fx:id="btnIn" focusTraversable="false" mnemonicParsing="false" onAction="#btnIn_OnAction" prefHeight="48.0" prefWidth="109.0" style="-fx-background-color: green; -fx-text-fill: white;" text="IN [F10]">
                <font>
                   <Font size="16.0" />
                </font>

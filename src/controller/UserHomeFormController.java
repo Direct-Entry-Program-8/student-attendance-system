@@ -21,6 +21,7 @@ public class UserHomeFormController {
     public Button btnSignOut;
     public Label lblHover;
     public Label lblGreeting;
+    public AnchorPane root;
 
     public void initialize(){
         final String initialText = lblHover.getText();
@@ -35,6 +36,17 @@ public class UserHomeFormController {
         btnSignOut.setOnMouseExited(event -> lblHover.setText(initialText));
 
         lblGreeting.setText("Welcome " + SecurityContextHolder.getPrincipal().getName() + "!");
+
+        root.setOnKeyReleased(event -> {
+            switch(event.getCode()){
+                case F1:
+                    btnRecordAttendance.fire();
+                    break;
+                case F12:
+                    btnSignOut.fire();
+                    break;
+            }
+        });
     }
 
     private void displayHoveringText(Button button){
