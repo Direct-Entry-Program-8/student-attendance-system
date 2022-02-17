@@ -8,7 +8,8 @@ CREATE TABLE student
 (
     id VARCHAR(30) PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    picture LONGBLOB NOT NULL
+    picture LONGBLOB NOT NULL,
+    guardian_contact VARCHAR(15) NOT NULL UNIQUE
 );
 
 CREATE TABLE user
