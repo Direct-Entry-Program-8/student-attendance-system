@@ -23,6 +23,7 @@ public class AdminHomeFormController {
     public Button btnSignOut;
     public Label lblHover;
     public Label lblGreeting;
+    public AnchorPane root;
 
     public void initialize(){
         final String initialText = lblHover.getText();
@@ -39,6 +40,17 @@ public class AdminHomeFormController {
         btnManageUsers.setOnMouseExited(event -> lblHover.setText(initialText));
         btnBackupRestore.setOnMouseExited(event -> lblHover.setText(initialText));
         btnSignOut.setOnMouseExited(event -> lblHover.setText(initialText));
+
+        root.setOnKeyReleased(event -> {
+            switch(event.getCode()){
+                case F1:
+                    btnRecordAttendance.fire();
+                    break;
+                case F12:
+                    btnSignOut.fire();
+                    break;
+            }
+        });
 
         lblGreeting.setText("Welcome " + SecurityContextHolder.getPrincipal().getName() + "!");
     }
