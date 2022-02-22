@@ -38,7 +38,7 @@ public class AlertFormController {
     }
 
     private void playSiren() throws URISyntaxException {
-        Media media = new Media(this.getClass().getResource("/assets/siren.mp3").toURI().toString());
+        Media media = new Media(this.getClass().getResource("/assets/siren.wav").toURI().toString());
         MediaPlayer player = new MediaPlayer(media);
         player.play();
     }
