@@ -106,6 +106,7 @@ public class RecordAttendanceFormController {
                 Stage stage = new Stage();
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
+                stage.setResizable(false);
                 stage.setTitle("Alert! Horek");
                 stage.sizeToScene();
                 stage.centerOnScreen();
@@ -123,6 +124,7 @@ public class RecordAttendanceFormController {
                 txtStudentID_OnAction(null);
             }
         } catch (Throwable e) {
+            e.printStackTrace();
             new DepAlert(Alert.AlertType.ERROR, "Failed to save the attendance, try again",
                     "Failure", "Error", ButtonType.OK).show();
         }

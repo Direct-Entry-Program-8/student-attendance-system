@@ -3,7 +3,10 @@ package controller;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -15,8 +18,15 @@ public class AlertFormController {
     public Label lblName;
     public Label lblDate;
 
-    public void initialize(){
+    public void initialize() throws URISyntaxException {
+        playSiren();
+    }
 
+    private void playSiren() throws URISyntaxException {
+        Media media = new Media(this.getClass().getResource("/assets/siren.mp3").toURI().toString());
+        MediaPlayer player = new MediaPlayer(media);
+        player.setCycleCount(2);
+        player.play();
     }
 
     public void initData(String studentId, String studentName, LocalDateTime date, boolean in){
