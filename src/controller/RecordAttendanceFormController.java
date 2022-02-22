@@ -6,15 +6,13 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import security.SecurityContextHolder;
 import util.DepAlert;
 
 import java.io.InputStream;
@@ -37,6 +35,7 @@ public class RecordAttendanceFormController {
     public Label lblStudentName;
     public AnchorPane root;
     private PreparedStatement stmSearchStudent;
+    private String studentId;
 
     public void initialize() {
         btnIn.setDisable(true);
@@ -73,14 +72,49 @@ public class RecordAttendanceFormController {
     }
 
     public void btnIn_OnAction(ActionEvent event) {
-        System.out.println("IN");
+        recordAttendance(true);
     }
 
 
     public void btnOut_OnAction(ActionEvent event) {
-        System.out.println("OUT");
+        recordAttendance(false);
     }
 
+    private void recordAttendance(boolean in){
+        Connection connection = DBConnection.getInstance().getConnection();
+
+        /* Check last record status */
+        try {
+            String lastStatus = null;
+            PreparedStatement stm = connection.
+                    prepareStatement("SELECT status FROM attendance WHERE student_id=? ORDER BY date DESC LIMIT 1");
+            stm.setString(1, studentId);
+            ResultSet rst = stm.executeQuery();
+            if (rst.next()){
+                lastStatus = rst.getString("status");
+            }
+
+            if (lastStatus != null && lastStatus.equals("IN") && in){
+                System.out.println("We have a problem here");
+            }else if (lastStatus !=null && lastStatus.equals("OUT") && !in){
+                System.out.println("We have a problem here");
+            }else{
+                PreparedStatement stm2 = connection.
+                        prepareStatement("INSERT INTO attendance (date, status, student_id, username) VALUES (NOW(),?,?,?)");
+                stm2.setString(1, in ? "IN": "OUT");
+                stm2.setString(2,studentId);
+                stm2.setString(3, SecurityContextHolder.getPrincipal().getUsername());
+                if (stm2.executeUpdate() != 1){
+                    throw new RuntimeException("Failed to add the attendance");
+                }
+                txtStudentID.clear();
+                txtStudentID_OnAction(null);
+            }
+        } catch (Throwable e) {
+            new DepAlert(Alert.AlertType.ERROR, "Failed to save the attendance, try again",
+                    "Failure", "Error", ButtonType.OK).show();
+        }
+    }
 
     public void txtStudentID_OnAction(ActionEvent event) {
         btnIn.setDisable(true);
@@ -102,6 +136,7 @@ public class RecordAttendanceFormController {
                 imgProfile.setImage(new Image(is));
                 btnIn.setDisable(false);
                 btnOut.setDisable(false);
+                studentId = txtStudentID.getText();
                 txtStudentID.selectAll();
             }else{
                 new DepAlert(Alert.AlertType.ERROR, "Invalid Student ID, Try again!", "Oops!", "Error").show();
