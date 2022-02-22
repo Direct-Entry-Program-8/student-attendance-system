@@ -52,15 +52,15 @@ public class RecordAttendanceFormController {
         try {
             stmSearchStudent = connection.prepareStatement("SELECT * FROM student WHERE id=?");
         } catch (Exception e) {
-            new DepAlert(Alert.AlertType.WARNING, "Failed to connect with DB","Connection Error", "Error").show();
+            new DepAlert(Alert.AlertType.WARNING, "Failed to connect with DB", "Connection Error", "Error").show();
             e.printStackTrace();
-            Platform.runLater(()->{
-                ((Stage)(btnIn.getScene().getWindow())).close();
+            Platform.runLater(() -> {
+                ((Stage) (btnIn.getScene().getWindow())).close();
             });
         }
 
         root.setOnKeyReleased(event -> {
-            switch (event.getCode()){
+            switch (event.getCode()) {
                 case F10:
                     btnIn.fire();
                     break;
@@ -80,31 +80,31 @@ public class RecordAttendanceFormController {
         recordAttendance(false);
     }
 
-    private void recordAttendance(boolean in){
+    private void recordAttendance(boolean in) {
         Connection connection = DBConnection.getInstance().getConnection();
 
         /* Check last record status */
         try {
             String lastStatus = null;
             PreparedStatement stm = connection.
-                    prepareStatement("SELECT status FROM attendance WHERE student_id=? ORDER BY date DESC LIMIT 1");
+                    prepareStatement("SELECT status, date FROM attendance WHERE student_id=? ORDER BY date DESC LIMIT 1");
             stm.setString(1, studentId);
             ResultSet rst = stm.executeQuery();
-            if (rst.next()){
+            if (rst.next()) {
                 lastStatus = rst.getString("status");
             }
 
-            if (lastStatus != null && lastStatus.equals("IN") && in){
+            if (lastStatus != null && lastStatus.equals("IN") && in) {
                 System.out.println("We have a problem here");
-            }else if (lastStatus !=null && lastStatus.equals("OUT") && !in){
+            } else if (lastStatus != null && lastStatus.equals("OUT") && !in) {
                 System.out.println("We have a problem here");
-            }else{
+            } else {
                 PreparedStatement stm2 = connection.
                         prepareStatement("INSERT INTO attendance (date, status, student_id, username) VALUES (NOW(),?,?,?)");
-                stm2.setString(1, in ? "IN": "OUT");
-                stm2.setString(2,studentId);
+                stm2.setString(1, in ? "IN" : "OUT");
+                stm2.setString(2, studentId);
                 stm2.setString(3, SecurityContextHolder.getPrincipal().getUsername());
-                if (stm2.executeUpdate() != 1){
+                if (stm2.executeUpdate() != 1) {
                     throw new RuntimeException("Failed to add the attendance");
                 }
                 txtStudentID.clear();
@@ -122,15 +122,15 @@ public class RecordAttendanceFormController {
         lblStudentName.setText("Please enter/scan the student ID to proceed");
         imgProfile.setImage(new Image("/view/assets/qr-code.png"));
 
-        if (txtStudentID.getText().trim().isEmpty()){
-           return;
+        if (txtStudentID.getText().trim().isEmpty()) {
+            return;
         }
 
         try {
             stmSearchStudent.setString(1, txtStudentID.getText().trim());
             ResultSet rst = stmSearchStudent.executeQuery();
 
-            if (rst.next()){
+            if (rst.next()) {
                 lblStudentName.setText(rst.getString("name").toUpperCase());
                 InputStream is = rst.getBlob("picture").getBinaryStream();
                 imgProfile.setImage(new Image(is));
@@ -138,7 +138,7 @@ public class RecordAttendanceFormController {
                 btnOut.setDisable(false);
                 studentId = txtStudentID.getText();
                 txtStudentID.selectAll();
-            }else{
+            } else {
                 new DepAlert(Alert.AlertType.ERROR, "Invalid Student ID, Try again!", "Oops!", "Error").show();
                 txtStudentID.selectAll();
                 txtStudentID.requestFocus();
