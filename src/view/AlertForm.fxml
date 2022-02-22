@@ -12,17 +12,17 @@
 
 <AnchorPane prefHeight="393.0" prefWidth="486.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AlertFormController">
    <children>
-      <ImageView fitHeight="114.0" fitWidth="114.0" layoutX="30.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="imgDanger" fitHeight="114.0" fitWidth="114.0" layoutX="30.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@assets/danger.png" />
          </image>
       </ImageView>
-      <Label layoutX="180.0" layoutY="26.0" text="ALERT!" textFill="RED">
+      <Label fx:id="lblAlert" layoutX="180.0" layoutY="26.0" text="ALERT!" textFill="RED">
          <font>
             <Font size="62.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" layoutX="144.0" layoutY="101.0" prefHeight="45.0" prefWidth="322.0" text="Danger Dial Ekak...! Ekko Walen Ena Ekek, Natthan Walata Yana Ekek...!" textAlignment="CENTER" wrapText="true" />
+      <Label fx:id="lblDescription" alignment="CENTER" layoutX="144.0" layoutY="101.0" prefHeight="45.0" prefWidth="322.0" text="Danger Dial Ekak...! Ekko Walen Ena Ekek, Natthan Walata Yana Ekek...!" textAlignment="CENTER" wrapText="true" />
       <VBox layoutX="22.0" layoutY="209.0" prefHeight="98.0" prefWidth="443.0" spacing="10.0">
          <children>
             <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Last Recorded Details">
