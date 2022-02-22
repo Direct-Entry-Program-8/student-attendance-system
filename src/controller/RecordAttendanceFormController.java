@@ -6,6 +6,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -94,10 +96,20 @@ public class RecordAttendanceFormController {
                 lastStatus = rst.getString("status");
             }
 
-            if (lastStatus != null && lastStatus.equals("IN") && in) {
-                System.out.println("We have a problem here");
-            } else if (lastStatus != null && lastStatus.equals("OUT") && !in) {
-                System.out.println("We have a problem here");
+            if ((lastStatus != null && lastStatus.equals("IN") && in)||
+                    (lastStatus != null && lastStatus.equals("OUT") && !in)){
+                FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/view/AlertForm.fxml"));
+                AnchorPane root = fxmlLoader.load();
+                AlertFormController controller = fxmlLoader.getController();
+                controller.initData(studentId,lblStudentName.getText(),
+                        rst.getTimestamp("date").toLocalDateTime(), in);
+                Stage stage = new Stage();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.setTitle("Alert! Horek");
+                stage.sizeToScene();
+                stage.centerOnScreen();
+                stage.showAndWait();
             } else {
                 PreparedStatement stm2 = connection.
                         prepareStatement("INSERT INTO attendance (date, status, student_id, username) VALUES (NOW(),?,?,?)");
