@@ -131,7 +131,7 @@ public class RecordAttendanceFormController {
             if (stm2.executeUpdate() != 1) {
                 throw new RuntimeException("Failed to add the attendance");
             }
-            new Thread(()->sendSMS(in)).start();
+            //new Thread(() -> sendSMS(in)).start();
             txtStudentID.clear();
             txtStudentID_OnAction(null);
 
@@ -151,10 +151,10 @@ public class RecordAttendanceFormController {
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setDoOutput(true);
             String payload = String.format("{\n" +
-                    "  \"message\": \"%s\",\n" +
-                    "  \"phoneNumber\": \"%s\"\n" +
-                    "}",
-                    student.name + "has " + (in?"entered": "exited") + " at :" + LocalDateTime.now(),
+                            "  \"message\": \"%s\",\n" +
+                            "  \"phoneNumber\": \"%s\"\n" +
+                            "}",
+                    student.name + " has " + (in ? "entered to " : "exited from") + "IJSE at : " + LocalDateTime.now(),
                     student.guardianContact);
             connection.getOutputStream().write(payload.getBytes());
             connection.getOutputStream().close();
