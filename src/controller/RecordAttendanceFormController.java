@@ -25,10 +25,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -57,6 +54,8 @@ public class RecordAttendanceFormController {
         })));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
+
+        updateLatestAttendance();
 
         Connection connection = DBConnection.getInstance().getConnection();
         try {
@@ -134,6 +133,7 @@ public class RecordAttendanceFormController {
             //new Thread(() -> sendSMS(in)).start();
             txtStudentID.clear();
             txtStudentID_OnAction(null);
+            updateLatestAttendance();
 
         } catch (Throwable e) {
             e.printStackTrace();
@@ -158,8 +158,31 @@ public class RecordAttendanceFormController {
                     student.guardianContact);
             connection.getOutputStream().write(payload.getBytes());
             connection.getOutputStream().close();
-            System.out.println(connection.getResponseCode());
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateLatestAttendance(){
+        try {
+            Connection connection = DBConnection.getInstance().getConnection();
+            Statement stm = connection.createStatement();
+            ResultSet rst = stm.executeQuery("SELECT * FROM attendance ORDER BY date DESC LIMIT 1");
+            PreparedStatement pstm = connection.prepareStatement("SELECT name FROM student WHERE id=?");
+            if (rst.next()){
+                pstm.setString(1, rst.getString("student_id"));
+                ResultSet rst2 = pstm.executeQuery();
+                rst2.next();
+                lblID.setText("ID: " + rst.getString("student_id"));
+                lblName.setText("Name: " + rst2.getString("name"));
+                lblStatus.setText("Date: " + rst.getString("date") + " - " + rst.getString("status"));
+            }else{
+                /* Fresh start */
+                lblID.setText("ID: -");
+                lblName.setText("Name: -");
+                lblStatus.setText("Date: -");
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
