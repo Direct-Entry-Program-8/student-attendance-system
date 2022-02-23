@@ -5,6 +5,8 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -101,8 +103,9 @@ public class RecordAttendanceFormController {
                 FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/view/AlertForm.fxml"));
                 AnchorPane root = fxmlLoader.load();
                 AlertFormController controller = fxmlLoader.getController();
+                SimpleBooleanProperty record = new SimpleBooleanProperty(false);
                 controller.initData(studentId,lblStudentName.getText(),
-                        rst.getTimestamp("date").toLocalDateTime(), in);
+                        rst.getTimestamp("date").toLocalDateTime(), in, record);
                 Stage stage = new Stage();
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
@@ -111,18 +114,20 @@ public class RecordAttendanceFormController {
                 stage.sizeToScene();
                 stage.centerOnScreen();
                 stage.showAndWait();
-            } else {
-                PreparedStatement stm2 = connection.
-                        prepareStatement("INSERT INTO attendance (date, status, student_id, username) VALUES (NOW(),?,?,?)");
-                stm2.setString(1, in ? "IN" : "OUT");
-                stm2.setString(2, studentId);
-                stm2.setString(3, SecurityContextHolder.getPrincipal().getUsername());
-                if (stm2.executeUpdate() != 1) {
-                    throw new RuntimeException("Failed to add the attendance");
-                }
-                txtStudentID.clear();
-                txtStudentID_OnAction(null);
+                if (!record.getValue()) return;
             }
+
+            PreparedStatement stm2 = connection.
+                    prepareStatement("INSERT INTO attendance (date, status, student_id, username) VALUES (NOW(),?,?,?)");
+            stm2.setString(1, in ? "IN" : "OUT");
+            stm2.setString(2, studentId);
+            stm2.setString(3, SecurityContextHolder.getPrincipal().getUsername());
+            if (stm2.executeUpdate() != 1) {
+                throw new RuntimeException("Failed to add the attendance");
+            }
+            txtStudentID.clear();
+            txtStudentID_OnAction(null);
+
         } catch (Throwable e) {
             e.printStackTrace();
             new DepAlert(Alert.AlertType.ERROR, "Failed to save the attendance, try again",

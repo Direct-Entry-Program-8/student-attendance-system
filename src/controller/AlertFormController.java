@@ -2,12 +2,15 @@ package controller;
 
 import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.net.URISyntaxException;
@@ -24,6 +27,7 @@ public class AlertFormController {
     public ImageView imgDanger;
     public Label lblAlert;
     public Label lblDescription;
+    private SimpleBooleanProperty record;
 
     public void initialize() throws URISyntaxException {
         ScaleTransition st = new ScaleTransition(Duration.millis(400), imgDanger);
@@ -43,15 +47,19 @@ public class AlertFormController {
         player.play();
     }
 
-    public void initData(String studentId, String studentName, LocalDateTime date, boolean in){
+    public void initData(String studentId, String studentName, LocalDateTime date, boolean in, SimpleBooleanProperty record){
         lblId.setText("ID: " + studentId.toUpperCase());
         lblName.setText("NAME: " + studentName.toUpperCase());
         lblDate.setText(date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a")) + " - " + (in? "IN" : "OUT"));
+        this.record = record;
     }
 
     public void btnProceed_OnAction(ActionEvent actionEvent) {
+        record.setValue(true);
+        ((Stage)(btnProceed.getScene().getWindow())).close();
     }
 
     public void btnCallPolice_OnAction(ActionEvent actionEvent) {
+        ((Stage)(btnProceed.getScene().getWindow())).close();
     }
 }
