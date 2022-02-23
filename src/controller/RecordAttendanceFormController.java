@@ -19,11 +19,17 @@ import javafx.util.Duration;
 import security.SecurityContextHolder;
 import util.DepAlert;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class RecordAttendanceFormController {
@@ -39,7 +45,7 @@ public class RecordAttendanceFormController {
     public Label lblStudentName;
     public AnchorPane root;
     private PreparedStatement stmSearchStudent;
-    private String studentId;
+    private Student student;
 
     public void initialize() {
         btnIn.setDisable(true);
@@ -92,19 +98,19 @@ public class RecordAttendanceFormController {
             String lastStatus = null;
             PreparedStatement stm = connection.
                     prepareStatement("SELECT status, date FROM attendance WHERE student_id=? ORDER BY date DESC LIMIT 1");
-            stm.setString(1, studentId);
+            stm.setString(1, student.id);
             ResultSet rst = stm.executeQuery();
             if (rst.next()) {
                 lastStatus = rst.getString("status");
             }
 
-            if ((lastStatus != null && lastStatus.equals("IN") && in)||
-                    (lastStatus != null && lastStatus.equals("OUT") && !in)){
+            if ((lastStatus != null && lastStatus.equals("IN") && in) ||
+                    (lastStatus != null && lastStatus.equals("OUT") && !in)) {
                 FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/view/AlertForm.fxml"));
                 AnchorPane root = fxmlLoader.load();
                 AlertFormController controller = fxmlLoader.getController();
                 SimpleBooleanProperty record = new SimpleBooleanProperty(false);
-                controller.initData(studentId,lblStudentName.getText(),
+                controller.initData(student.id, lblStudentName.getText(),
                         rst.getTimestamp("date").toLocalDateTime(), in, record);
                 Stage stage = new Stage();
                 Scene scene = new Scene(root);
@@ -120,11 +126,12 @@ public class RecordAttendanceFormController {
             PreparedStatement stm2 = connection.
                     prepareStatement("INSERT INTO attendance (date, status, student_id, username) VALUES (NOW(),?,?,?)");
             stm2.setString(1, in ? "IN" : "OUT");
-            stm2.setString(2, studentId);
+            stm2.setString(2, student.id);
             stm2.setString(3, SecurityContextHolder.getPrincipal().getUsername());
             if (stm2.executeUpdate() != 1) {
                 throw new RuntimeException("Failed to add the attendance");
             }
+            new Thread(()->sendSMS(in)).start();
             txtStudentID.clear();
             txtStudentID_OnAction(null);
 
@@ -132,6 +139,28 @@ public class RecordAttendanceFormController {
             e.printStackTrace();
             new DepAlert(Alert.AlertType.ERROR, "Failed to save the attendance, try again",
                     "Failure", "Error", ButtonType.OK).show();
+        }
+    }
+
+    private void sendSMS(boolean in) {
+        try {
+            URL url = new URL("https://api.smshub.lk/api/v2/send/single");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Authorization", "A4n2dulq9EZvFVNHsO4oufAqBtQTr4tj7WZYgkqskF9L9EQrcUhSm10OtBw3UOnVGoScqBmXIIKM5eCGsLdyu4CUmWfxwXHM10pMUtGKZ5OPhFSauEXWUqpfq07YW9j2Fu3Hf36uz8ShSVBNHtS9TKInYLRGrveo6a7MO5ftvU4t6Ha5T65wahDEdh1OCkghJclAH1Nj6ExcMm5BOWzseFlMALqIcmKc0xRCd02qhNVbv6WQRBEhlPnnogWG7yWwtxtFF087xkaGlhcyT6dCMXMmJyM6sa7cSNCyxaZA5OK3Oi4PA798pswC9tlvBMbLPPqKxZ3N7pz8U2S9thdMKJyQJsG6FFXBaIlE65fvdnMmvsdQHSx8Enee6utzGigczFUclT6be6RQDqksUPmNdOxlXrU6F3WOjUdZ7v3BodGHyvfW2yh6XsDSpVF7OaYnIbB0kgxUAV55bYpy6UdrK2j2QTwlEvPcKg59eZen9wdLtwJjEPxCXW2hEQeSXgelpB2rgvAGbUnB9ViqMJjCVc0ovA4sArNs0stcR4Qiw0o2nyhcL51SQb8Adm8axh2m2Tk49tdJzZu8hLB2jZ1mmTMcQwQqr1aeU7mv8Uh2S79wOFBKA2yhTCf1kG73KgaK8ieltQVRBNeJwR011gT5k72udiS3COQHNBE03WDfhdobVpT9oU7d5wLmGMh30AsAsNrq9beLWo3qU12hzfYamjbyWyDPlru68FFciVpAG1jo4oYCfz8lUCy1UPv6CL0MuTsm0uNfbxnIy5MttCfFHJQRXHDivPFHjRSaS0mVv8AmXzRtjBIlM4oM8uJohBZm4lZLeUTnXHChANxolPo3NOMkjbsz826uuraeyzuCaISGdt8C9GpoV8vSmjvBdDI4OW7ZcwBr1TJsO3sAZY9FpbyKprhAqRfzIxtNqpJuQgpVBnVCQNDIUkPWwzhjGhi9ozhaD4YSOjo3lU3zluzvS8chT8fQJf0aCfEqU4rF2Cesmto3ROTibGFfu1XxjkAv");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setDoOutput(true);
+            String payload = String.format("{\n" +
+                    "  \"message\": \"%s\",\n" +
+                    "  \"phoneNumber\": \"%s\"\n" +
+                    "}",
+                    student.name + "has " + (in?"entered": "exited") + " at :" + LocalDateTime.now(),
+                    student.guardianContact);
+            connection.getOutputStream().write(payload.getBytes());
+            connection.getOutputStream().close();
+            System.out.println(connection.getResponseCode());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -155,19 +184,32 @@ public class RecordAttendanceFormController {
                 imgProfile.setImage(new Image(is));
                 btnIn.setDisable(false);
                 btnOut.setDisable(false);
-                studentId = txtStudentID.getText();
+                student = new Student(txtStudentID.getText(), rst.getString("name"),
+                        rst.getString("guardian_contact"));
                 txtStudentID.selectAll();
             } else {
                 new DepAlert(Alert.AlertType.ERROR, "Invalid Student ID, Try again!", "Oops!", "Error").show();
                 txtStudentID.selectAll();
+                student = null;
                 txtStudentID.requestFocus();
-                return;
             }
         } catch (SQLException e) {
             e.printStackTrace();
             new DepAlert(Alert.AlertType.WARNING, "Something went wrong. Please try again!", "Connection Failure", "Error").show();
             txtStudentID.selectAll();
             txtStudentID.requestFocus();
+        }
+    }
+
+    private static class Student {
+        String id;
+        String name;
+        String guardianContact;
+
+        public Student(String id, String name, String guardianContact) {
+            this.id = id;
+            this.name = name;
+            this.guardianContact = guardianContact;
         }
     }
 
