@@ -28,6 +28,7 @@ public class AlertFormController {
     public Label lblAlert;
     public Label lblDescription;
     private SimpleBooleanProperty record;
+    private MediaPlayer player;
 
     public void initialize() throws URISyntaxException {
         ScaleTransition st = new ScaleTransition(Duration.millis(400), imgDanger);
@@ -43,7 +44,14 @@ public class AlertFormController {
 
     private void playSiren() throws URISyntaxException {
         Media media = new Media(this.getClass().getResource("/assets/siren.wav").toURI().toString());
-        MediaPlayer player = new MediaPlayer(media);
+        player = new MediaPlayer(media);
+        Platform.runLater(()->{
+            lblId.getScene().getWindow().setOnCloseRequest(event -> {
+                System.out.println("Stopped..!");
+                player.stop();
+                player.dispose();
+            });
+        });
         player.play();
     }
 
@@ -56,10 +64,14 @@ public class AlertFormController {
 
     public void btnProceed_OnAction(ActionEvent actionEvent) {
         record.setValue(true);
+        player.stop();
+        player.dispose();
         ((Stage)(btnProceed.getScene().getWindow())).close();
     }
 
     public void btnCallPolice_OnAction(ActionEvent actionEvent) {
+        player.stop();
+        player.dispose();
         ((Stage)(btnProceed.getScene().getWindow())).close();
     }
 }

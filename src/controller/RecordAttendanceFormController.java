@@ -14,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import security.SecurityContextHolder;
@@ -107,16 +108,18 @@ public class RecordAttendanceFormController {
                     (lastStatus != null && lastStatus.equals("OUT") && !in)) {
                 FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/view/AlertForm.fxml"));
                 AnchorPane root = fxmlLoader.load();
+                Stage stage = new Stage();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
                 AlertFormController controller = fxmlLoader.getController();
                 SimpleBooleanProperty record = new SimpleBooleanProperty(false);
                 controller.initData(student.id, lblStudentName.getText(),
                         rst.getTimestamp("date").toLocalDateTime(), in, record);
-                Stage stage = new Stage();
-                Scene scene = new Scene(root);
-                stage.setScene(scene);
                 stage.setResizable(false);
                 stage.setTitle("Alert! Horek");
                 stage.sizeToScene();
+                stage.initModality(Modality.WINDOW_MODAL);
+                stage.initOwner(this.root.getScene().getWindow());
                 stage.centerOnScreen();
                 stage.showAndWait();
                 if (!record.getValue()) return;
