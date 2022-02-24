@@ -170,14 +170,11 @@ public class RecordAttendanceFormController {
         try {
             Connection connection = DBConnection.getInstance().getConnection();
             Statement stm = connection.createStatement();
-            ResultSet rst = stm.executeQuery("SELECT * FROM attendance ORDER BY date DESC LIMIT 1");
-            PreparedStatement pstm = connection.prepareStatement("SELECT name FROM student WHERE id=?");
+            ResultSet rst = stm.executeQuery("SELECT s.id, s.name, a.status, a.date FROM student s INNER JOIN attendance a on s.id = a.student_id\n" +
+                    "ORDER BY date DESC LIMIT 1");
             if (rst.next()){
-                pstm.setString(1, rst.getString("student_id"));
-                ResultSet rst2 = pstm.executeQuery();
-                rst2.next();
-                lblID.setText("ID: " + rst.getString("student_id"));
-                lblName.setText("Name: " + rst2.getString("name"));
+                lblID.setText("ID: " + rst.getString("id"));
+                lblName.setText("Name: " + rst.getString("name"));
                 lblStatus.setText("Date: " + rst.getString("date") + " - " + rst.getString("status"));
             }else{
                 /* Fresh start */
