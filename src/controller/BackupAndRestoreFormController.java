@@ -9,7 +9,7 @@ import util.DepAlert;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+import java.time.LocalDate;
 
 public class BackupAndRestoreFormController {
     public Button btnBackup;
@@ -17,25 +17,28 @@ public class BackupAndRestoreFormController {
     public void btnBackup_OnAction(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose backup location");
+        fileChooser.setInitialFileName(LocalDate.now() + "-sas-bak");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Backup files (*.dep8bak)", "*.dep8bak"));
         File file = fileChooser.showSaveDialog(btnBackup.getScene().getWindow());
 
-        if (file != null){
+        if (file != null) {
             ProcessBuilder mysqlDumpProcessBuilder = new ProcessBuilder("mysqldump",
                     "-h", "localhost",
                     "--port", "3306",
                     "-u", "root",
                     "-pmysql",
-                    "-d",
+                    "--add-drop-database",
                     "--databases", "dep8_student_attendance");
-            mysqlDumpProcessBuilder.redirectOutput(file);
+
+            mysqlDumpProcessBuilder.redirectOutput(System.getProperty("os.name").equalsIgnoreCase("windows") ? file : new File(file.getAbsolutePath() + ".dep8bak"));
             try {
                 Process mysqlDump = mysqlDumpProcessBuilder.start();
                 int exitCode = mysqlDump.waitFor();
 
-                if (exitCode == 0){
-                    new DepAlert(Alert.AlertType.INFORMATION, "").show();
-                }else{
+                if (exitCode == 0) {
+                    new DepAlert(Alert.AlertType.INFORMATION, "Backup process succeeded",
+                            "Success", ButtonType.OK).show();
+                } else {
                     new DepAlert(Alert.AlertType.ERROR, "Backup process failed, try again!",
                             "Backup failed", "Error", ButtonType.OK).show();
                 }
@@ -43,5 +46,8 @@ public class BackupAndRestoreFormController {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void btnRestore_OnAction(ActionEvent actionEvent) {
     }
 }
